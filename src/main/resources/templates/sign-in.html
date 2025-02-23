@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments/head}"></head>
+<body class="bg-success-subtle">
+<nav th:replace="~{fragments/navbar}"></nav>
+<main class="container d-flex justify-content-center">
+    <div class="card shadow-lg p-4 rounded w-100 mt-5" style="max-width: 500px;">
+        <form th:action="@{/sign-in}" method="post">
+            <h2 class="text-center text-success mb-4">Вход</h2>
+
+            <div th:if="${param.error}" class="text-danger mb-2">
+                Невалидно потребителско име/имейл или парола.
+            </div>
+            <div th:if="${param.logout}" class="text-warning mb-2">
+                Излязохте от профила си.
+            </div>
+
+            <div class="mb-3">
+                <label for="usernameOrEmail" class="form-label">Потребителско име или имейл</label>
+                <input type="text" id="usernameOrEmail" name="usernameOrEmail" class="form-control"
+                       placeholder="Въведете потребителско име или имейл" value="andi08">
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Парола</label>
+                <input type="password" id="password" name="password" class="form-control"
+                       placeholder="Въведете парола" value="andi2008">
+            </div>
+
+            <button type="submit" class="btn btn-success w-100">Вход</button>
+
+            <hr class="my-3 border-success">
+
+            <div class="text-center">
+                <a href="/sign-up" class="text-success text-decoration-none">Все още нямаш акаунт?</a>
+            </div>
+        </form>
+    </div>
+</main>
+<footer th:replace="~{fragments/footer}"></footer>
+</body>
+</html>

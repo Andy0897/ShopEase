@@ -1,0 +1,75 @@
+<nav class="navbar navbar-expand-lg bg-success" xmlns:sec="http://www.w3.org/1999/xhtml"
+     xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="container-fluid" style="max-width: 1600px;">
+        <h2 class="text-light fw-bold px-4" onclick="window.location.href='/';">ShopEase</h2>
+
+        <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Начало</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/products">Продукти</a>
+                </li>
+            </ul>
+
+            <div class="d-flex align-items-center ms-auto gap-2">
+                <div class="d-flex align-items-center gap-2">
+                    <form class="d-flex my-2" style="width: 100%; max-width: 400px;">
+                        <div class="input-group">
+                            <input class="form-control border-0 shadow-sm" type="search" placeholder="Какво търсиш днес?"
+                                   aria-label="Search">
+                            <button class="btn btn-light shadow-sm search-btn" type="submit">
+                                Търси
+                            </button>
+                        </div>
+                    </form>
+                    <div class="dropdown" sec:authorize="hasAuthority('ADMIN')">
+                        <button class="btn text-white dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            <img src="/images/admin-icon.png" class="img-fluid"
+                                 style="width: 25px; height: 25px;" alt="Admin Icon">
+                            Админ меню
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/products/add">Добави продукт</a></li>
+                            <li><a class="dropdown-item" href="/orders">Прегледай поръчки</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown">
+                        <button class="btn text-white dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            <img src="/images/profile-icon.jpg" class="img-fluid" style="width: 25px; height: 25px;"
+                                 alt="Profile Icon">
+                            Моят акаунт
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li sec:authorize="isAuthenticated()"><a class="dropdown-item" href="/orders">Моите
+                                поръчки</a></li>
+                            <li sec:authorize="isAuthenticated()"><a class="dropdown-item text-danger"
+                                                                     href="/delete-account">Изтриване на акаунт</a></li>
+                            <li sec:authorize="isAuthenticated()"><a class="dropdown-item" href="/logout">Изход</a></li>
+                            <li sec:authorize="isAnonymous"><a class="dropdown-item" href="/sign-in">Вход</a></li>
+                            <li sec:authorize="isAnonymous"><a class="dropdown-item" href="/sign-up">Регистрация</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <button sec:authorize="isAuthenticated()" class="btn text-white"
+                            onclick="window.location.href='/cart';">
+                        <img src="/images/cart-icon.jpg" class="img-fluid" style="width: 25px; height: 25px;"
+                             alt="Cart Icon">
+                        Моята количка
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
