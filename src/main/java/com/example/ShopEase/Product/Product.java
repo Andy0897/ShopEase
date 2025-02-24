@@ -43,13 +43,80 @@ public class Product {
     @Min(value = 1, message = "Цената трябва да бъде поне 1 лв.")
     private double price;
 
-    public Product(Long id, String title, String description, Category category, List<byte[]> images, Integer mainImageIndex, double price) {
+    @Min(value = 0)
+    private int quantity;
+
+    private int views;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public List<byte[]> getImages() {
+        return images;
+    }
+
+    public void setImages(List<byte[]> images) {
         this.images = images;
+    }
+
+    public Integer getMainImageIndex() {
+        return mainImageIndex;
+    }
+
+    public void setMainImageIndex(Integer mainImageIndex) {
         this.mainImageIndex = mainImageIndex;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
         this.price = price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
     }
 }

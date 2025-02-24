@@ -24,15 +24,6 @@
             </div>
 
             <div class="col-lg-6 col-md-12">
-                <label for="brand" class="mb-1">Марка</label>
-                <select th:field="*{brand}" id="brand" name="brand" class="form-control">
-                    <option value="">Избери марка</option>
-                    <option th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.name}"></option>
-                </select>
-                <div th:each="error : ${#fields.errors('brand')}" th:text="${error}" class="alert alert-danger mt-2" role="alert"></div>
-            </div>
-
-            <div class="col-lg-6 col-md-12">
                 <label for="category" class="mb-1">Категория</label>
                 <select th:field="*{category}" id="category" name="category" class="form-control">
                     <option value="">Избери категория</option>
@@ -41,45 +32,7 @@
                 <div th:each="error : ${#fields.errors('category')}" th:text="${error}" class="alert alert-danger mt-2" role="alert"></div>
             </div>
 
-            <div class="col-lg-6 col-md-12">
-                <label for="material" class="mb-1">Материал</label>
-                <select th:field="*{material}" id="material" name="material" class="form-control">
-                    <option value="">Избери материал</option>
-                    <option th:each="material : ${materials}" th:value="${material}" th:text="${material}"></option>
-                </select>
-                <div th:each="error : ${#fields.errors('material')}" th:text="${error}" class="alert alert-danger mt-2" role="alert"></div>
-            </div>
 
-            <div class="col-lg-6 col-md-12">
-                <label for="color" class="mb-1">Цвят</label>
-                <select th:field="*{color}" id="color" name="color" class="form-control">
-                    <option value="">Избери цвят</option>
-                    <option th:each="color : ${colors}" th:value="${color}" th:text="${color}"></option>
-                </select>
-                <div th:each="error : ${#fields.errors('color')}" th:text="${error}" class="alert alert-danger mt-2" role="alert"></div>
-            </div>
-
-            <div class="col-lg-6 col-md-12">
-                <label for="gender" class="mb-1">Пол</label>
-                <select th:field="*{gender}" id="gender" name="gender" class="form-control">
-                    <option value="">Избери</option>
-                    <option value="Мъжки">Мъжки</option>
-                    <option value="Дамски">Дамски</option>
-                </select>
-                <div th:each="error : ${#fields.errors('gender')}" th:text="${error}" class="alert alert-danger mt-2" role="alert"></div>
-            </div>
-
-            <div class="col-12">
-                <h3 class="mb-2">Размери и наличности</h3>
-                <div id="sizes-container" class="mb-3"></div>
-                <button type="button" onclick="addSizeRow()" class="btn btn-dark">Добави размер</button>
-                <div th:if="${areSizesEmpty}" class="alert alert-danger mt-2" role="alert">
-                    Полето е задължително
-                </div>
-                <div th:if="${wrongSizeDetails}" class="alert alert-danger mt-2" role="alert">
-                    Невалидни размери или наличности
-                </div>
-            </div>
 
             <div class="col-12">
                 <label for="images" class="mb-1">Качи снимки</label>

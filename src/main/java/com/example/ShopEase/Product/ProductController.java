@@ -1,6 +1,5 @@
 package com.example.ShopEase.Product;
 
-import com.example.ShopEase.Brand.*;
 import com.example.ShopEase.Category.*;
 import com.example.ShopEase.ImageEncoder;
 import jakarta.validation.Valid;
@@ -18,102 +17,43 @@ import java.util.stream.Collectors;
 public class ProductController {
     private ProductRepository productRepository;
     private ProductService productService;
-    private BrandRepository brandRepository;
     private CategoryRepository categoryRepository;
 
-    public ProductController(ProductRepository productRepository, ProductService productService, BrandRepository brandRepository, CategoryRepository categoryRepository) {
+    public ProductController(ProductRepository productRepository, ProductService productService, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.productService = productService;
-        this.brandRepository = brandRepository;
         this.categoryRepository = categoryRepository;
     }
 
     @GetMapping("/add")
     public String showAddProductForm(Model model) {
         model.addAttribute("product", new Product());
-        model.addAttribute("brands", ((List<Brand>) brandRepository.findAll()).stream().sorted(Comparator.comparing(brand -> brand.getName())));
         model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("materials", Arrays.asList("Памук", "Полиестер", "Вълна", "Кожа", "Кашмир", "Лен", "Деним", "Коприна", "Еластан", "Акрил"));
-        model.addAttribute("colors", Arrays.asList("Черен", "Бял", "Син", "Червен", "Зелен", "Жълт", "Кафяв", "Сив", "Оранжев", "Розов", "Лилав"));
         model.addAttribute("areImagesSelected", true);
-        model.addAttribute("wrongSizeDetails", false);
-        model.addAttribute("areSizesEmpty", false);
         return "product/add";
     }
 
     @PostMapping("/submit")
-    public String saveProduct(@RequestParam(required = false) List<String> sizes, @RequestParam(required = false) List<Integer> quantities, @RequestParam("images") MultipartFile[] images, @RequestParam(value = "mainImageIndex", required = false) Integer mainImageIndex, @ModelAttribute @Valid Product product, BindingResult bindingResult, Model model) {
-        if (sizes == null) {
-            sizes = new ArrayList<>();
-        }
-
-        if (quantities == null) {
-            quantities = new ArrayList<>();
-        }
-
+    public String saveProduct(@RequestParam("images") MultipartFile[] images, @RequestParam(value = "mainImageIndex", required = false) Integer mainImageIndex, @ModelAttribute @Valid Product product, BindingResult bindingResult, Model model) {
         if (mainImageIndex == null || mainImageIndex < 0 || mainImageIndex >= images.length) {
             mainImageIndex = 0;
         }
-        return productService.submitProduct(sizes, quantities, images, mainImageIndex, product, bindingResult, model);
+        return productService.submitProduct(images, mainImageIndex, product, bindingResult, model);
     }
 
     @GetMapping
-    public String getShowAllProducts(@RequestParam(value = "brand", required = false) Long brandId,
-                                     @RequestParam(value = "category", required = false) Long categoryId,
-                                     @RequestParam(value = "material", required = false) String material,
-                                     @RequestParam(value = "color", required = false) String color,
-                                     @RequestParam(value = "minPrice", required = false) Integer minPrice,
-                                     @RequestParam(value = "maxPrice", required = false) Integer maxPrice,
-                                     @RequestParam(value = "gender", required = false) String gender, Model model) {
-        List<Product> products = ((List<Product>) productRepository.findAll()).stream()
-                .filter(product -> (brandId == null || product.getBrand().getId().equals(brandId)))
-                .filter(product -> (categoryId == null || product.getCategory().getId().equals(categoryId)))
-                .filter(product -> ((material == null || material.isEmpty()) || product.getMaterial().equalsIgnoreCase(material)))
-                .filter(product -> ((color == null || color.isEmpty()) || product.getColor().equalsIgnoreCase(color)))
-                .filter(product -> (minPrice == null || product.getPrice() >= minPrice))
-                .filter(product -> (maxPrice == null || product.getPrice() <= maxPrice))
-                .filter(product -> ((gender == null || gender.isEmpty()) || product.getGender().equalsIgnoreCase(gender)))
-                .collect(Collectors.toList());
-        model.addAttribute("products", products);
-        model.addAttribute("encoder", new ImageEncoder());
-        model.addAttribute("brands", ((List<Brand>) brandRepository.findAll()).stream().sorted(Comparator.comparing(brand -> brand.getName())));
-        model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("materials", Arrays.asList("Памук", "Полиестер", "Вълна", "Кожа", "Кашмир", "Лен", "Деним", "Коприна", "Еластан", "Акрил"));
-        model.addAttribute("colors", Arrays.asList("Черен", "Бял", "Син", "Червен", "Зелен", "Жълт", "Кафяв", "Сив", "Оранжев", "Розов", "Лилав"));
-        return "product/show-all";
-    }
-
-    @GetMapping("/bestsellers")
-    public String getShowPopularProducts(@RequestParam(value = "brand", required = false) Long brandId,
-                                         @RequestParam(value = "category", required = false) Long categoryId,
-                                         @RequestParam(value = "material", required = false) String material,
-                                         @RequestParam(value = "color", required = false) String color,
-                                         @RequestParam(value = "minPrice", required = false) Integer minPrice,
-                                         @RequestParam(value = "maxPrice", required = false) Integer maxPrice,
-                                         @RequestParam(value = "gender", required = false) String gender, Model model) {
-        List<Product> products = (List<Product>) productRepository.findAll();
-        products.sort(Comparator.comparing(Product::getPopularity));
-        Collections.reverse(products);
-        if (products.size() > 20) {
-            products = products.subList(0, 19);
+    public String getShowProducts(@RequestParam(value = "search", required = false) String search, Model model) {
+        List<Product> products;
+        if(search != null || !search.isEmpty()) {
+            products = productService.generateSearch(search);
         }
-        products = products.stream()
-                .filter(product -> (brandId == null || product.getBrand().getId().equals(brandId)))
-                .filter(product -> (categoryId == null || product.getCategory().getId().equals(categoryId)))
-                .filter(product -> ((material == null || material.isEmpty()) || product.getMaterial().equalsIgnoreCase(material)))
-                .filter(product -> ((color == null || color.isEmpty()) || product.getColor().equalsIgnoreCase(color)))
-                .filter(product -> (minPrice == null || product.getPrice() >= minPrice))
-                .filter(product -> (maxPrice == null || product.getPrice() <= maxPrice))
-                .filter(product -> ((gender == null || gender.isEmpty()) || product.getGender().equalsIgnoreCase(gender)))
-                .collect(Collectors.toList());
-
+        else {
+            products = (List<Product>) productRepository.findAll();
+        }
         model.addAttribute("products", products);
         model.addAttribute("encoder", new ImageEncoder());
-        model.addAttribute("brands", ((List<Brand>) brandRepository.findAll()).stream().sorted(Comparator.comparing(brand -> brand.getName())));
         model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("materials", Arrays.asList("Памук", "Полиестер", "Вълна", "Кожа", "Кашмир", "Лен", "Деним", "Коприна", "Еластан", "Акрил"));
-        model.addAttribute("colors", Arrays.asList("Черен", "Бял", "Син", "Червен", "Зелен", "Жълт", "Кафяв", "Сив", "Оранжев", "Розов", "Лилав"));
-        return "product/show-bestsellers";
+        return "product/show-all";
     }
 
     @GetMapping("/{productId}")
@@ -124,26 +64,8 @@ public class ProductController {
         return "product/show-single";
     }
 
-    @PostMapping("/submit-increase-popularity/{productId}")
-    public String getSubmitIncreasePopularity(@PathVariable("productId") Long productId) {
-        return productService.submitIncreasePopularity(productId);
+    @PostMapping("/submit-increase-views/{productId}")
+    public String getSubmitIncreaseViews(@PathVariable("productId") Long productId) {
+        return productService.submitIncreaseViews(productId);
     }
-
-    @PostMapping("/submit-update-quantities")
-    public String updateProductSizes(@RequestParam Long productId, @RequestParam("sizesId") List<Long> sizesId, @RequestParam("quantities") List<Integer> quantities) {
-        Product product = productRepository.findById(productId).get();
-
-        for (int i = 0; i < sizesId.size(); i++) {
-            if(quantities.get(i) == null) {
-                continue;
-            }
-            if(quantities.get(i) < 0) {
-                return "redirect:/products/" + productId;
-            }
-            productService.updateSizeQuantity(product, sizesId.get(i), quantities.get(i));
-        }
-
-        return "redirect:/products/" + productId;
-    }
-
 }

@@ -1,9 +1,6 @@
 package com.example.ShopEase.Product;
 
-import com.example.ShopEase.Brand.BrandRepository;
 import com.example.ShopEase.Category.CategoryRepository;
-import com.example.ShopEase.Size.ProductSize;
-import com.example.ShopEase.Size.ProductSizeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -11,30 +8,22 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ProductService {
     private ProductRepository productRepository;
-    private BrandRepository brandRepository;
     private CategoryRepository categoryRepository;
-    private ProductSizeRepository productSizeRepository;
 
-    public ProductService(ProductRepository productRepository, BrandRepository brandRepository, CategoryRepository categoryRepository, ProductSizeRepository productSizeRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
-        this.brandRepository = brandRepository;
         this.categoryRepository = categoryRepository;
-        this.productSizeRepository = productSizeRepository;
     }
 
     @Transactional
-    public String submitProduct(List<String> sizes, List<Integer> quantities, MultipartFile[] images, Integer mainImageIndex, Product product, BindingResult bindingResult, Model model) {
+    public String submitProduct(MultipartFile[] images, Integer mainImageIndex, Product product, BindingResult bindingResult, Model model) {
         List<byte[]> imageList = new ArrayList<>();
         boolean nullImages = true;
-        boolean invalidSizes = false;
-        System.out.println(sizes.size() + " " + quantities.size());
         try {
             for (MultipartFile file : images) {
                 if (!file.isEmpty()) {
@@ -50,64 +39,31 @@ public class ProductService {
             return "product/add";
         }
 
-        for (int i = 0; i < sizes.size(); i++) {
-            ProductSize productSize = new ProductSize();
-            productSize.setSize(sizes.get(i));
-            productSize.setQuantity(quantities.get(i));
-            productSize.setProduct(product);
-            if(checkIfSizeValid(productSize)){
-                product.addSize(productSize);
-                System.out.println("Valid");
-            }
-            else {
-                System.out.println("Invalid");
-                invalidSizes = true;
-                break;
-            }
-        }
         if(bindingResult.hasFieldErrors("title") || bindingResult.hasFieldErrors("description") ||
-                bindingResult.hasFieldErrors("brand") || bindingResult.hasFieldErrors("category") ||
-                bindingResult.hasFieldErrors("material") || bindingResult.hasFieldErrors("color") ||
-                bindingResult.hasFieldErrors("gender") || bindingResult.hasFieldErrors("price") ||
-                invalidSizes || nullImages) {
+                bindingResult.hasFieldErrors("category") ||
+                bindingResult.hasFieldErrors("price") ||
+                bindingResult.hasFieldErrors("quantity") || nullImages) {
             model.addAttribute("product", product);
-            model.addAttribute("brands", brandRepository.findAll());
             model.addAttribute("categories", categoryRepository.findAll());
-            model.addAttribute("materials", Arrays.asList("Памук", "Полиестер", "Вълна", "Кожа", "Кашмир", "Лен", "Деним", "Коприна", "Еластан", "Акрил"));
-            model.addAttribute("colors", Arrays.asList("Черен", "Бял", "Син", "Червен", "Зелен", "Жълт", "Кафяв", "Сив", "Оранжев", "Розов", "Лилав"));
             model.addAttribute("areImagesSelected", !nullImages);
-            model.addAttribute("wrongSizeDetails", invalidSizes);
-            model.addAttribute("areSizesEmpty", product.getSizes().isEmpty());
             return "product/add";
         }
-        product.setPopularity(1);
+        product.setViews(0);
 
         productRepository.save(product);
         return "redirect:/products";
     }
 
-    public String submitIncreasePopularity(Long productId) {
+    public String submitIncreaseViews(Long productId) {
         Product product = productRepository.findById(productId).get();
-        product.setPopularity(product.getPopularity() + 1);
+        product.setViews(product.getViews() + 1);
         productRepository.save(product);
         return "redirect:/products/" + productId;
     }
 
-    private boolean checkIfSizeValid(ProductSize productSize) {
-        if(productSize.getSize() == null || productSize.getQuantity() == null || productSize.getSize().isEmpty() || productSize.getQuantity() < 0) {
-            return false;
-        }
-        return true;
+    public List<Product> generateSearch(String search) {
+        List<Product> products = (List<Product>) productRepository.findAll();
+        products = products.stream().filter(product -> product.getTitle().contains(search)).toList();
+        return products;
     }
-
-    public void updateSizeQuantity(Product product, Long sizeId, int newQuantity) {
-        for (ProductSize size : product.getSizes()) {
-            if (size.getId().equals(sizeId)) {
-                size.setQuantity(size.getQuantity() + newQuantity);
-                productSizeRepository.save(size);
-                break;
-            }
-        }
-    }
-
 }
