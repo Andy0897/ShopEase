@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/products")
@@ -42,12 +41,11 @@ public class ProductController {
     }
 
     @GetMapping
-    public String getShowProducts(@RequestParam(value = "search", required = false) String search, Model model) {
+    public String getShowAllProducts(@RequestParam(value = "search", required = false) String search, Model model) {
         List<Product> products;
-        if(search != null || !search.isEmpty()) {
+        if (search != null) {
             products = productService.generateSearch(search);
-        }
-        else {
+        } else {
             products = (List<Product>) productRepository.findAll();
         }
         model.addAttribute("products", products);
@@ -67,5 +65,10 @@ public class ProductController {
     @PostMapping("/submit-increase-views/{productId}")
     public String getSubmitIncreaseViews(@PathVariable("productId") Long productId) {
         return productService.submitIncreaseViews(productId);
+    }
+
+    @PostMapping("/submit-add-quantity")
+    public String getSubmitAddQuantity(@RequestParam("productId") Long productId, @RequestParam("quantity") Integer quantity) {
+        return productService.submitAddQuantity(productId, quantity);
     }
 }

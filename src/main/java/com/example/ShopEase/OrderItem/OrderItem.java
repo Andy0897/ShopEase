@@ -1,9 +1,7 @@
 package com.example.ShopEase.OrderItem;
 
 import com.example.ShopEase.Product.Product;
-import com.example.ShopEase.Size.ProductSize;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "order_items")
@@ -16,11 +14,6 @@ public class OrderItem {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
-
-    @ManyToOne
-    @JoinColumn(name = "size_id")
-    @NotNull
-    private ProductSize productSize;
 
     private int quantity;
 
@@ -40,14 +33,6 @@ public class OrderItem {
 
     public void setProduct(Product product) {
         this.product = product;
-    }
-
-    public ProductSize getProductSize() {
-        return productSize;
-    }
-
-    public void setProductSize(ProductSize productSize) {
-        this.productSize = productSize;
     }
 
     public int getQuantity() {

@@ -32,8 +32,6 @@
                 <div th:each="error : ${#fields.errors('category')}" th:text="${error}" class="alert alert-danger mt-2" role="alert"></div>
             </div>
 
-
-
             <div class="col-12">
                 <label for="images" class="mb-1">Качи снимки</label>
                 <input type="file" id="images" name="images" multiple class="form-control"
@@ -54,7 +52,13 @@
                 <div th:each="error : ${#fields.errors('price')}" th:text="${error}" class="alert alert-danger mt-2" role="alert"></div>
             </div>
 
-            <!-- Submit Button -->
+            <div class="col-lg-6 col-md-12">
+                <label for="quantity" class="mb-1">Количество</label>
+                <input type="number" th:field="*{quantity}" id="quantity" name="quantity" class="form-control"
+                       placeholder="Количество" step="1">
+                <div th:each="error : ${#fields.errors('quantity')}" th:text="${error}" class="alert alert-danger mt-2" role="alert"></div>
+            </div>
+
             <div class="col-12">
                 <button type="submit" class="btn btn-dark w-100">Запази продукта</button>
             </div>

@@ -7,8 +7,7 @@ import com.example.ShopEase.Order.OrderRepository;
 import com.example.ShopEase.OrderItem.OrderItem;
 import com.example.ShopEase.OrderItem.OrderItemRepository;
 import com.example.ShopEase.Product.Product;
-import com.example.ShopEase.Size.ProductSize;
-import com.example.ShopEase.Size.ProductSizeRepository;
+import com.example.ShopEase.Product.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -25,16 +24,16 @@ UserService {
     private UserMapper userMapper;
     private CartRepository cartRepository;
     private OrderItemRepository orderItemRepository;
-    private ProductSizeRepository productSizeRepository;
     private OrderRepository orderRepository;
+    private ProductRepository productRepository;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, CartRepository cartRepository, OrderItemRepository orderItemRepository, ProductSizeRepository productSizeRepository, OrderRepository orderRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, CartRepository cartRepository, OrderItemRepository orderItemRepository, OrderRepository orderRepository, ProductRepository productRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.cartRepository = cartRepository;
         this.orderItemRepository = orderItemRepository;
-        this.productSizeRepository = productSizeRepository;
         this.orderRepository = orderRepository;
+        this.productRepository = productRepository;
     }
 
     public String submitUser(UserDTO userDTO, BindingResult bindingResult, Model model) {
@@ -69,18 +68,11 @@ UserService {
         if (cart != null) {
             if(!cart.getItems().isEmpty()) {
                 for (OrderItem orderItem : cart.getItems()) {
-                    System.out.println(orderItem != null);
                     Product product = orderItem.getProduct();
 
-                    ProductSize productSize = ((List<ProductSize>)productSizeRepository.findAll()).stream()
-                            .filter(size -> size.getProduct().getId().equals(product.getId())
-                                    && size.getId().equals(orderItem.getProductSize().getId()))
-                            .findFirst()
-                            .orElse(null);
-
-                    if (productSize != null) {
-                        productSize.setQuantity(productSize.getQuantity() + orderItem.getQuantity());
-                        productSizeRepository.save(productSize);
+                    if (product != null) {
+                        product.setQuantity(product.getQuantity() + orderItem.getQuantity());
+                        productRepository.save(product);
                     }
                 }
                 orderItemRepository.deleteAll(cart.getItems());

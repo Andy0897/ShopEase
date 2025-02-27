@@ -61,9 +61,19 @@ public class ProductService {
         return "redirect:/products/" + productId;
     }
 
+    public String submitAddQuantity(Long productId, Integer quantity) {
+        if(quantity == null || quantity > 0) {
+            Product product = productRepository.findById(productId).get();
+            product.setQuantity(product.getQuantity() + quantity);
+            productRepository.save(product);
+            return "redirect:/products/" + productId;
+        }
+        return "redirect:/products/" + productId + "?quantityError";
+    }
+
     public List<Product> generateSearch(String search) {
         List<Product> products = (List<Product>) productRepository.findAll();
-        products = products.stream().filter(product -> product.getTitle().contains(search)).toList();
+        products = products.stream().filter(product -> product.getTitle().toLowerCase().contains(search.toLowerCase())).toList();
         return products;
     }
 }
