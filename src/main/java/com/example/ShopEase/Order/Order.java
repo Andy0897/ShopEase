@@ -1,6 +1,5 @@
 package com.example.ShopEase.Order;
 
-import com.example.ShopEase.Encryption.EncryptDecryptConverter;
 import com.example.ShopEase.OrderItem.OrderItem;
 import com.example.ShopEase.User.User;
 import jakarta.persistence.*;
@@ -19,24 +18,19 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    @Convert(converter = EncryptDecryptConverter.class)
     @Pattern(regexp = "^(\\+359|0)8[7-9]\\d{7}$", message = "Въведете валиден български телефонен номер")
     private String phoneNumber;
 
-    @Convert(converter = EncryptDecryptConverter.class)
     @NotEmpty(message = "Градът е задължителен")
     private String city;
 
-    @Convert(converter = EncryptDecryptConverter.class)
     @NotEmpty(message = "Полето е задължително")
     @Pattern(regexp = "\\d{4}", message = "Пощенският код трябва да бъде 4 цифри")
     private String postCode;
 
-    @Convert(converter = EncryptDecryptConverter.class)
     @NotEmpty(message = "Полето е задължително")
     private String street;
 
-    @Convert(converter = EncryptDecryptConverter.class)
     @NotEmpty(message = "Полето е задължително")
     @Pattern(regexp = "\\d{1,3}[A-Za-z]?", message = "Номерът на къщата трябва да бъде 1-3 цифри, може да има буква (напр. 15A, 103B)")
     private String houseNumber;
@@ -50,9 +44,6 @@ public class Order {
 
     @NotEmpty(message = "Полето е задължително")
     private String orderStatus;
-
-    @NotEmpty(message = "Полето е задължително")
-    private String paymentOption;
 
     private LocalDate orderDate;
 
@@ -133,14 +124,6 @@ public class Order {
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
-    }
-
-    public String getPaymentOption() {
-        return paymentOption;
-    }
-
-    public void setPaymentOption(String paymentOption) {
-        this.paymentOption = paymentOption;
     }
 
     public LocalDate getOrderDate() {

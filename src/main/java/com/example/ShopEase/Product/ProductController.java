@@ -62,11 +62,6 @@ public class ProductController {
         return "product/show-single";
     }
 
-    @PostMapping("/submit-increase-views/{productId}")
-    public String getSubmitIncreaseViews(@PathVariable("productId") Long productId) {
-        return productService.submitIncreaseViews(productId);
-    }
-
     @PostMapping("/submit-add-quantity")
     public String getSubmitAddQuantity(@RequestParam("productId") Long productId, @RequestParam("quantity") Integer quantity) {
         return productService.submitAddQuantity(productId, quantity);

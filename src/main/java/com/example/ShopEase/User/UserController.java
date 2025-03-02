@@ -33,6 +33,11 @@ public class UserController {
 
     @GetMapping({"/", "/home"})
     public String getHome(Model model) {
+        List<Product> products = (List<Product>) productRepository.findAll();
+        if (products.size() > 3) {
+            products.subList(0, 2);
+        }
+        model.addAttribute("products", products);
         model.addAttribute("encoder", new ImageEncoder());
         return "home";
     }

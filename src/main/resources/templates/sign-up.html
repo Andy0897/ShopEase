@@ -30,7 +30,6 @@
             <div class="mb-3">
                 <label for="email" class="form-label">Имейл</label>
                 <input type="email" th:field="*{email}" id="email" class="form-control" placeholder="Въведете имейл">
-                <small class="form-text text-muted">Никога няма да споделяме вашия имейл с никой друг.</small>
                 <div th:each="error : ${#fields.errors('email')}" th:text="${error}" class="text-danger mt-2"></div>
                 <div th:if="${existsUserByEmail}" class="text-danger mt-2">Този имейл вече е използван</div>
             </div>
@@ -44,11 +43,12 @@
             <div class="mb-3 form-check">
                 <input type="checkbox" th:field="*{agreeToTerms}" id="agreeToTerms" class="form-check-input">
                 <label for="agreeToTerms" class="form-check-label">
-                    Съгласен/на съм с
-                    <a href="/policies/terms-conditions" class="text-success text-decoration-none">Общите условия за ползване</a>
-                    и давам съгласие <strong>Aestique Clothing</strong> да обработва личните ми данни за управление на профила ми,
+                    Приемам
+                    <a href="/policies/terms-conditions" class="text-success text-decoration-none">Общите условия</a>
+                    и се съгласявам <strong class="text-success">ShopEase</strong> да обработва моите лични данни за нуждите на профила,
                     съгласно <a href="/policies/privacy-policy" class="text-success text-decoration-none">Политиката за поверителност</a>.
                 </label>
+
                 <div th:each="error : ${#fields.errors('agreeToTerms')}" th:text="${error}" class="text-danger mt-2"></div>
             </div>
 

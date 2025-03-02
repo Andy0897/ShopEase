@@ -66,6 +66,7 @@
         }
 
         .form-control:active,
+        .form-select:active,
         .btn:active {
             border-color: #198754 !important;
             outline: 0;
@@ -73,10 +74,17 @@
         }
 
         .form-control:focus,
+        .form-select:focus,
         .btn:focus {
             border-color: #198754 !important;
             outline: 0;
             box-shadow: 0 0 0 .20rem #198754 !important;
+        }
+
+        .accordion-button:focus {
+            border-color: transparent !important;
+            outline: 0;
+            box-shadow: 0 0 0 .20rem transparent !important;
         }
 
         .modal {

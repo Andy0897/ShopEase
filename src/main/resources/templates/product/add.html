@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head th:replace="~{fragments/head}"></head>
-<body>
+<body class="bg-success-subtle">
 <nav th:replace="~{fragments/navbar}"></nav>
 
-<main class="container mt-5" style="max-width: 800px;">
-    <form th:action="@{/products/submit}" method="post" enctype="multipart/form-data" th:object="${product}" class="shadow-sm p-4 rounded">
-        <h1 class="text-center mb-4">Добави продукт</h1>
+<main class="container mt-5" style="max-width: 600px;">
+    <form th:action="@{/products/submit}" method="post" enctype="multipart/form-data" th:object="${product}" class="card p-4 rounded">
+        <h1 class="text-center text-success mb-4">Добави продукт</h1>
 
         <div class="row g-4">
             <div class="col-12">
                 <label for="title" class="mb-1">Заглавие</label>
                 <input type="text" th:field="*{title}" id="title" name="title" class="form-control"
                        placeholder="Въведете заглавие">
-                <div th:each="error : ${#fields.errors('title')}" th:text="${error}" class="alert alert-danger mt-2" role="alert"></div>
+                <div th:each="error : ${#fields.errors('title')}" th:text="${error}" class="text-danger mt-2" role="alert"></div>
             </div>
 
             <div class="col-12">
                 <label for="description" class="mb-1">Описание</label>
                 <textarea th:field="*{description}" id="description" name="description" class="form-control"
                           placeholder="Въведете описание"></textarea>
-                <div th:each="error : ${#fields.errors('description')}" th:text="${error}" class="alert alert-danger mt-2" role="alert"></div>
+                <div th:each="error : ${#fields.errors('description')}" th:text="${error}" class="text-danger mt-2" role="alert"></div>
             </div>
 
-            <div class="col-lg-6 col-md-12">
+            <div class="col-12">
                 <label for="category" class="mb-1">Категория</label>
                 <select th:field="*{category}" id="category" name="category" class="form-control">
                     <option value="">Избери категория</option>
                     <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
                 </select>
-                <div th:each="error : ${#fields.errors('category')}" th:text="${error}" class="alert alert-danger mt-2" role="alert"></div>
+                <div th:each="error : ${#fields.errors('category')}" th:text="${error}" class="text-danger mt-2" role="alert"></div>
             </div>
 
             <div class="col-12">
@@ -40,27 +40,27 @@
                     <p>Изберете основната снимка</p>
                     <div id="mainImageOptions"></div>
                 </div>
-                <div th:if="${!areImagesSelected}" class="alert alert-danger mt-2" role="alert">
+                <div th:if="${!areImagesSelected}" class="text-danger mt-2" role="alert">
                     Полето е задължително
                 </div>
             </div>
 
-            <div class="col-lg-6 col-md-12">
+            <div class="col-12">
                 <label for="price" class="mb-1">Цена</label>
                 <input type="number" th:field="*{price}" id="price" name="price" class="form-control"
                        placeholder="Цена" step="any">
-                <div th:each="error : ${#fields.errors('price')}" th:text="${error}" class="alert alert-danger mt-2" role="alert"></div>
-            </div>
-
-            <div class="col-lg-6 col-md-12">
-                <label for="quantity" class="mb-1">Количество</label>
-                <input type="number" th:field="*{quantity}" id="quantity" name="quantity" class="form-control"
-                       placeholder="Количество" step="1">
-                <div th:each="error : ${#fields.errors('quantity')}" th:text="${error}" class="alert alert-danger mt-2" role="alert"></div>
+                <div th:each="error : ${#fields.errors('price')}" th:text="${error}" class="text-danger mt-2" role="alert"></div>
             </div>
 
             <div class="col-12">
-                <button type="submit" class="btn btn-dark w-100">Запази продукта</button>
+                <label for="quantity" class="mb-1">Количество</label>
+                <input type="number" th:field="*{quantity}" id="quantity" name="quantity" class="form-control"
+                       placeholder="Количество" step="1">
+                <div th:each="error : ${#fields.errors('quantity')}" th:text="${error}" class="text-danger mt-2" role="alert"></div>
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-success w-100">Запази продукта</button>
             </div>
         </div>
     </form>

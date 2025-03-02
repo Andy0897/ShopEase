@@ -48,17 +48,9 @@ public class ProductService {
             model.addAttribute("areImagesSelected", !nullImages);
             return "product/add";
         }
-        product.setViews(0);
 
         productRepository.save(product);
         return "redirect:/products";
-    }
-
-    public String submitIncreaseViews(Long productId) {
-        Product product = productRepository.findById(productId).get();
-        product.setViews(product.getViews() + 1);
-        productRepository.save(product);
-        return "redirect:/products/" + productId;
     }
 
     public String submitAddQuantity(Long productId, Integer quantity) {

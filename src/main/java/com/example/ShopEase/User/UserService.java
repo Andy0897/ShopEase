@@ -9,6 +9,7 @@ import com.example.ShopEase.OrderItem.OrderItemRepository;
 import com.example.ShopEase.Product.Product;
 import com.example.ShopEase.Product.ProductRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

@@ -1,44 +1,34 @@
 <!DOCTYPE html>
 <html lang="bg" xmlns:th="http://www.w3.org/1999/xhtml">
 <head th:replace="~{fragments/head}"></head>
-<body>
+<body class="bg-success-subtle">
 <nav th:replace="~{fragments/navbar}"></nav>
 
-<main class="container mt-5">
-    <h1 class="text-center mb-4">Всички поръчки</h1>
+<main class="container my-5">
+    <h1 class="text-center text-success mb-4">Всички поръчки</h1>
 
-    <table class="table table-striped shadow-sm p-4">
-        <thead class="table-dark">
-        <tr>
-            <th>№</th>
-            <th>Клиент</th>
-            <th>Телефон</th>
-            <th>Град</th>
-            <th>Обща цена</th>
-            <th>Статус</th>
-            <th>Дата</th>
-            <th>Детайли</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="order : ${orders}">
-            <td th:text="${order.id}"></td>
-            <td th:text="${order.user.username}"></td>
-            <td th:text="${order.phoneNumber}"></td>
-            <td th:text="${order.city}"></td>
-            <td th:text="${#numbers.formatDecimal(order.totalPrice, 2, 2)} + ' лв.'"></td>
-            <td>
-                    <span th:text="${order.orderStatus}" class="badge"
-                          th:classappend="${order.orderStatus == 'Доставено' ? 'bg-success' : 'bg-warning'}">
-                    </span>
-            </td>
-            <td th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy')}"></td>
-            <td>
-                <a th:href="@{/orders/details/{id}(id=${order.id})}" class="btn btn-dark btn-sm">Преглед</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="row g-3">
+        <div th:each="order : ${orders}" class="col-md-6 col-lg-4">
+            <div class="card shadow-sm border-success h-100">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold mb-2">Поръчка № <span th:text="${order.id}"></span></h5>
+                    <p class="text-muted mb-1"><strong>Клиент:</strong> <span th:text="${order.user.username}"></span></p>
+                    <p class="text-muted mb-1"><strong>Телефон:</strong> <span th:text="${order.phoneNumber}"></span></p>
+                    <p class="text-muted mb-1"><strong>Град:</strong> <span th:text="${order.city}"></span></p>
+                    <p class="text-success fw-bold mb-1"><strong>Обща цена:</strong> <span th:text="${#numbers.formatDecimal(order.totalPrice, 2, 2)} + ' лв.'"></span></p>
+                    <p class="mb-1">
+                        <span class="badge rounded-pill"
+                              th:text="${order.orderStatus}"
+                              th:classappend="${order.orderStatus == 'Доставено' ? 'bg-success text-white' : 'bg-warning text-dark'}">
+                        </span>
+                    </p>
+                    <p class="text-muted mb-3"><strong>Дата:</strong> <span th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy')}"></span></p>
+                    <a th:href="@{/orders/details/{id}(id=${order.id})}"
+                       class="btn btn-outline-success w-100">Преглед на поръчката</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 <footer th:replace="~{fragments/footer}"></footer>

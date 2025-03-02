@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 
 import java.security.Principal;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderItemService {
@@ -29,13 +30,12 @@ public class OrderItemService {
         Product product = productRepository.findById(productId).get();
         Cart cart = userRepository.getUserByUsername(principal.getName()).getCart();
 
-        if(Objects.equals(orderItemRepository.findOrderItemInCartByProductId(cart.getId(), product.getId()).getProduct(), product)) {
-            OrderItem orderItem = orderItemRepository.findOrderItemInCartByProductId(cart.getId(), product.getId());
-            orderItem.setQuantity(orderItem.getQuantity() + 1);
-            orderItem.setTotalPrice(orderItem.getTotalPrice() + product.getPrice());
-            orderItemRepository.save(orderItem);
-        }
-        else {
+        if (cart.getItems().stream().anyMatch(orderItem -> orderItem.getProduct() == product)) {
+            OrderItem productOrderItem = cart.getItems().stream().filter(orderItem -> orderItem.getProduct() == product).collect(Collectors.toUnmodifiableList()).get(0);
+            productOrderItem.setQuantity(productOrderItem.getQuantity() + 1);
+            productOrderItem.setTotalPrice(productOrderItem.getTotalPrice() + product.getPrice());
+            orderItemRepository.save(productOrderItem);
+        } else {
             OrderItem orderItem = new OrderItem();
             orderItem.setProduct(product);
             orderItem.setQuantity(1);

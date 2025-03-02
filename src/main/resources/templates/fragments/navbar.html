@@ -51,14 +51,15 @@
                             Моят акаунт
                         </button>
                         <ul class="dropdown-menu">
-                            <li sec:authorize="isAuthenticated()"><a class="dropdown-item" href="/orders">Моите
-                                поръчки</a></li>
-                            <li sec:authorize="isAuthenticated()"><a class="dropdown-item text-danger"
-                                                                     href="/delete-account">Изтриване на акаунт</a></li>
-                            <li sec:authorize="isAuthenticated()"><a class="dropdown-item" href="/logout">Изход</a></li>
-                            <li sec:authorize="isAnonymous"><a class="dropdown-item" href="/sign-in">Вход</a></li>
-                            <li sec:authorize="isAnonymous"><a class="dropdown-item" href="/sign-up">Регистрация</a>
-                            </li>
+                            <form th:action="@{/submit-delete}" method="post">
+                                <li sec:authorize="isAuthenticated()"><a class="dropdown-item" href="/orders/my-orders">Моите
+                                    поръчки</a></li>
+                                <li sec:authorize="isAuthenticated()"><button type="submit" class="dropdown-item text-danger">Изтриване на акаунт</button></li>
+                                <li sec:authorize="isAuthenticated()"><a class="dropdown-item" href="/logout">Изход</a></li>
+                                <li sec:authorize="isAnonymous"><a class="dropdown-item" href="/sign-in">Вход</a></li>
+                                <li sec:authorize="isAnonymous"><a class="dropdown-item" href="/sign-up">Регистрация</a>
+                                </li>
+                            </form>
                         </ul>
                     </div>
 

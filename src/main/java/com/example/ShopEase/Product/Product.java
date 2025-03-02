@@ -40,10 +40,8 @@ public class Product {
     @Min(value = 1, message = "Цената трябва да бъде поне 1 лв.")
     private double price;
 
-    @Min(value = 0)
+    @Min(value = 0, message = "Количеството трябва да бъде поне 0")
     private int quantity;
-
-    private int views;
 
     public Long getId() {
         return id;
@@ -107,13 +105,5 @@ public class Product {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public int getViews() {
-        return views;
-    }
-
-    public void setViews(int views) {
-        this.views = views;
     }
 }

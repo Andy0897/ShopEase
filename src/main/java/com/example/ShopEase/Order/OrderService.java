@@ -30,7 +30,7 @@ public class OrderService {
         this.cartRepository = cartRepository;
     }
 
-    public String submitOrder(String stripeToken, Order order, BindingResult bindingResult, Principal principal, Model model) {
+    public String submitOrder(Order order, BindingResult bindingResult, Principal principal, Model model) {
         if(bindingResult.hasErrors()) {
             model.addAttribute("order", order);
             model.addAttribute("stripePublicKey", stripePublicKey);
@@ -38,18 +38,6 @@ public class OrderService {
             model.addAttribute("paymentFailure", false);
             model.addAttribute("currency", "BGN");
             return "order/checkout";
-        }
-        if(order.getPaymentOption().equals("Карта")) {
-            try {
-                stripeService.chargeCreditCard(stripeToken, order.getTotalPrice());
-            } catch (StripeException e) {
-                model.addAttribute("order", order);
-                model.addAttribute("stripePublicKey", stripePublicKey);
-                model.addAttribute("amount", order.getTotalPrice());
-                model.addAttribute("paymentFailure", true);
-                model.addAttribute("paymentFailure", true);
-                return "order/checkout";
-            }
         }
         Cart cart = userRepository.getUserByUsername(principal.getName()).getCart();
         cart.setItems(new ArrayList<>());

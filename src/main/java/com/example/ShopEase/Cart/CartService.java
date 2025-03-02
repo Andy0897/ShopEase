@@ -32,6 +32,7 @@ public class CartService {
         product.setQuantity(product.getQuantity() + orderItem.getQuantity());
         cart.removeItem(orderItem);
         cartRepository.save(cart);
+        orderItemRepository.delete(orderItem);
         productRepository.save(product);
         return "redirect:/cart";
     }

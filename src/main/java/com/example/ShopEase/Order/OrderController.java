@@ -22,9 +22,6 @@ public class OrderController {
     private OrderService orderService;
     private UserRepository userRepository;
 
-    @Value("${stripe.public.key}")
-    private String stripePublicKey;
-
     public OrderController(OrderRepository orderRepository, OrderService orderService, UserRepository userRepository) {
         this.orderRepository = orderRepository;
         this.orderService = orderService;
@@ -45,23 +42,12 @@ public class OrderController {
         order.setOrderStatus("В изчакване");
 
         model.addAttribute("order", order);
-        model.addAttribute("stripePublicKey", stripePublicKey);
-        model.addAttribute("amount", order.getTotalPrice());
-        model.addAttribute("paymentFailure", false);
-        model.addAttribute("currency", "BGN");
         return "order/checkout";
     }
 
     @PostMapping("/submit")
-    public String getSubmitOrder(@RequestParam(value = "stripeToken", required = false) String stripeToken, @ModelAttribute @Valid Order order, BindingResult bindingResult, Principal principal, Model model) {
-        if(stripeToken == null) {
-            order.setPaymentOption("Наложен платеж");
-        }
-        else {
-            order.setPaymentOption("Карта");
-        }
-        System.out.println(stripeToken);
-        return orderService.submitOrder(stripeToken, order, bindingResult, principal, model);
+    public String getSubmitOrder(@ModelAttribute @Valid Order order, BindingResult bindingResult, Principal principal, Model model) {
+        return orderService.submitOrder(order, bindingResult, principal, model);
     }
 
     @GetMapping("/thank-you")

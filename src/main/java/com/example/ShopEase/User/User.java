@@ -1,7 +1,6 @@
 package com.example.ShopEase.User;
 
 import com.example.ShopEase.Cart.Cart;
-import com.example.ShopEase.Encryption.EncryptDecryptConverter;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,16 +11,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Convert(converter = EncryptDecryptConverter.class)
     private String firstName;
 
-    @Convert(converter = EncryptDecryptConverter.class)
     private String lastName;
 
-    @Convert(converter = EncryptDecryptConverter.class)
     private String username;
 
-    @Convert(converter = EncryptDecryptConverter.class)
     private String email;
 
     private String password;
