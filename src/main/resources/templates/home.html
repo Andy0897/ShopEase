@@ -30,7 +30,6 @@
 
                             <div class="card-body text-center">
                                 <h6 class="text-uppercase fw-bold text-muted mb-1" th:text="${product.title}"></h6>
-                                <p class="card-title fw-bold text-dark" th:text="${product.title}"></p>
                                 <h5 class="text-success fw-light">
                                     <span th:text="${#numbers.formatDecimal(product.price, 2, 2)} + ' лв.'"></span>
                                 </h5>

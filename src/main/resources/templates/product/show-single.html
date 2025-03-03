@@ -10,7 +10,7 @@
             <div class="col-lg-8 col-md-12">
                 <div class="text-center">
                     <div class="ratio ratio-4x3">
-                        <img id="largeImage" class="img-fluid rounded object-fit-contain"
+                        <img id="largeImage" class="img-fluid rounded object-fit-contain bg-white"
                              th:src="'data:image/jpeg;base64,' + ${encoder.encodeToBase64(product.images.get(product.mainImageIndex))}"
                              alt="Основно изображение на продукта"
                              style="max-height: 500px;"/>
@@ -81,7 +81,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-dark">Добави</button>
+                        <button type="submit" class="btn btn-success">Добави</button>
                     </div>
                 </form>
             </div>
